@@ -77,6 +77,55 @@ select first_name, last_name, sum(amount) as Total_Amount_paid from (select s.cu
 -- 7a
 select * from film where title like 'K%' or title like 'Q%' and  language_id in (select language_id  from language where name = 'english');
 
+-- 7b
+select first_name, last_name from actor where actor_id in (select actor_id from film_actor where film_id in (select film_id from film where title = "Alone Trip"));
+
+-- 7c
+select first_name, last_name, email from customer where address_id in (select address_id from address where city_id in (select city_id from city where country_id in (  select country_id from country where country = "Canada"  )));
+
+-- 7d
+
+select * from film where film_id in (select film_id from film_category where category_id in (select category_id from category where name = "Family"));
+
+-- 7e
+select * from film order by rental_rate desc;
+
+-- 7f
+
+select * from sales_by_store;
+
+-- 7g
+select s.store_id, cy.city, coun.country from store s join address ad on (s.address_id = ad.address_id)
+								join city cy on (cy.city_id = ad.city_id)
+                                join country coun on (coun.country_id = cy.country_id);
+-- 7h
+-- category, film_category, inventory, payment, and rental.
+
+
+
+select nt.`name`, sum(nt.amount) as total_amt  from (select ct.category_id as cid, ct.`name` as `name`  ,pt.amount as amount from category ct join film_category fc on (ct.category_id = fc.category_id)
+						  join inventory inv on (inv.film_id = fc.film_id ) 
+                          join rental rt on (inv.inventory_id = rt.inventory_id)
+                          join payment pt on (rt.rental_id = pt.rental_id)) nt group by nt.`name` order by total_amt desc limit 5;
+
+
+
+
+
+-- 8a
+CREATE VIEW top_five_genres
+AS
+select nt.`name`, sum(nt.amount) as total_amt  from (select ct.category_id as cid, ct.`name` as `name`  ,pt.amount as amount from category ct join film_category fc on (ct.category_id = fc.category_id)
+						  join inventory inv on (inv.film_id = fc.film_id ) 
+                          join rental rt on (inv.inventory_id = rt.inventory_id)
+                          join payment pt on (rt.rental_id = pt.rental_id)) nt group by nt.`name` order by total_amt desc limit 5;
+-- 8b
+                         
+
+
+  
+
+
 
 
 
